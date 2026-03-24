@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=MiniFS Manager
+Comment=Gestionnaire de système de fichiers MiniFS
+Exec=/usr/local/bin/minifs-gui
+Icon=drive-harddisk
+Terminal=false
+Categories=System;FileTools;
+Keywords=filesystem;disk;format;mount;

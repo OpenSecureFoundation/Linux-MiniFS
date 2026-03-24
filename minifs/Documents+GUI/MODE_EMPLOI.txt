@@ -1,0 +1,130 @@
+═══════════════════════════════════════════════════════════════
+  MINIFS - MODE D'EMPLOI COMPLET
+═══════════════════════════════════════════════════════════════
+
+IMPORTANT : Vous avez probablement plusieurs installations qui se 
+chevauchent. Il faut TOUT nettoyer avant de réinstaller.
+
+═══════════════════════════════════════════════════════════════
+ÉTAPE 1 : DÉSINSTALLER COMPLÈTEMENT (OBLIGATOIRE)
+═══════════════════════════════════════════════════════════════
+
+Ouvrez un terminal et exécutez :
+
+    cd minifs-fuse
+    sudo ./UNINSTALL_COMPLETE.sh
+
+Cela va :
+  ✓ Démonter tous les systèmes MiniFS
+  ✓ Supprimer TOUS les binaires (partout)
+  ✓ Nettoyer tous les anciens builds
+
+═══════════════════════════════════════════════════════════════
+ÉTAPE 2 : INSTALLATION PROPRE
+═══════════════════════════════════════════════════════════════
+
+Ensuite, dans le même terminal :
+
+    sudo ./INSTALL_PROPRE.sh
+
+Cela va :
+  ✓ Vérifier/installer FUSE
+  ✓ Compiler proprement
+  ✓ Installer dans /usr/local/
+  ✓ Tester l'installation
+
+═══════════════════════════════════════════════════════════════
+ÉTAPE 3 : PREMIER TEST
+═══════════════════════════════════════════════════════════════
+
+Après l'installation :
+
+    # Créer une image
+    dd if=/dev/zero of=test.img bs=1M count=50
+
+    # Formater
+    /usr/local/sbin/mkfs.minifs test.img
+
+    # Créer le point de montage
+    mkdir -p ~/mnt-test
+
+    # Monter (en arrière-plan)
+    /usr/local/bin/minifs_fuse test.img ~/mnt-test -o default_permissions &
+
+    # Utiliser
+    echo "Hello MiniFS!" > ~/mnt-test/test.txt
+    cat ~/mnt-test/test.txt
+    ls -la ~/mnt-test/
+
+    # Créer plusieurs fichiers
+    for i in {1..10}; do
+        echo "Fichier $i" > ~/mnt-test/file_$i.txt
+    done
+
+    # Vérifier
+    ls ~/mnt-test/
+
+    # Démonter
+    fusermount3 -u ~/mnt-test
+
+═══════════════════════════════════════════════════════════════
+ÉTAPE 4 : AJOUTER AU PATH (OPTIONNEL)
+═══════════════════════════════════════════════════════════════
+
+Pour taper directement "mkfs.minifs" au lieu du chemin complet :
+
+    echo 'export PATH=$PATH:/usr/local/bin:/usr/local/sbin' >> ~/.bashrc
+    source ~/.bashrc
+
+Puis testez :
+
+    mkfs.minifs --version
+
+═══════════════════════════════════════════════════════════════
+DÉPANNAGE
+═══════════════════════════════════════════════════════════════
+
+Si "commande introuvable" après installation :
+  → Utilisez les chemins complets : /usr/local/sbin/mkfs.minifs
+
+Si erreur de montage :
+  → sudo modprobe fuse
+  → Vérifiez que le point de montage existe
+  → Démontez d'abord : fusermount3 -u ~/mnt-test
+
+Si problème de permissions :
+  → Utilisez sudo pour monter
+  → Ou ajoutez-vous au groupe fuse :
+    sudo usermod -a -G fuse $USER
+    (puis déconnectez-vous/reconnectez-vous)
+
+═══════════════════════════════════════════════════════════════
+COMMANDES UTILES
+═══════════════════════════════════════════════════════════════
+
+Formater     : /usr/local/sbin/mkfs.minifs <image>
+Monter       : /usr/local/bin/minifs_fuse <image> <point> -o default_permissions
+Démonter     : fusermount3 -u <point>
+Vérifier     : /usr/local/sbin/fsck.minifs <image>
+Statistiques : /usr/local/sbin/debugfs.minifs <image> --stats
+Superbloc    : /usr/local/sbin/debugfs.minifs <image> --superblock
+
+═══════════════════════════════════════════════════════════════
+FICHIERS IMPORTANTS
+═══════════════════════════════════════════════════════════════
+
+UNINSTALL_COMPLETE.sh - Désinstaller complètement
+INSTALL_PROPRE.sh     - Installation propre
+QUICKSTART.md         - Guide de démarrage rapide
+README.md             - Documentation complète
+
+═══════════════════════════════════════════════════════════════
+SUPPORT
+═══════════════════════════════════════════════════════════════
+
+Si vous rencontrez des problèmes :
+1. Vérifiez MODE_EMPLOI.txt (ce fichier)
+2. Consultez QUICKSTART.md
+3. Lisez docs/TROUBLESHOOTING.md
+
+═══════════════════════════════════════════════════════════════

@@ -1,0 +1,37 @@
+╔════════════════════════════════════════════════════════╗
+║                                                        ║
+║  MINIFS - DÉMARRAGE RAPIDE                             ║
+║                                                        ║
+╚════════════════════════════════════════════════════════╝
+
+###INSTALLATION (UNE SEULE COMMANDE):
+
+  sudo ./installer.sh
+
+OU
+
+  sudo ./INSTALLER_UNIVERSEL.sh
+
+(Les deux font exactement la même chose)
+
+
+###UTILISATION:
+
+  # Créer
+  minifs-easy create disk.img 200
+
+  # Monter
+  minifs-easy mount disk.img ~/mnt
+
+  # Utiliser
+  echo "Test" > ~/mnt/test.txt
+  mkdir ~/mnt/dossier
+  cp fichier.pdf ~/mnt/
+
+  # Démonter
+  minifs-easy umount ~/mnt
+
+
+AIDE:
+
+  minifs-easy help
